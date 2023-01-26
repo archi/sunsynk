@@ -25,119 +25,143 @@ DEPRECATED: Dict[str, Sensor] = {}
 # Battery
 ##########
 _SENSORS += (
-    TempSensor(182, "Battery temperature", CELSIUS, 0.1),
-    Sensor(183, "Battery voltage", VOLT, 0.01),
-    Sensor(184, "Battery SOC", "%"),
-    Sensor(190, "Battery power", WATT, -1),
-    Sensor(191, "Battery current", AMPS, -0.01),
+    TempSensor(586, "Battery temperature", CELSIUS, 0.1),
+    Sensor(587, "Battery voltage", VOLT, 0.01),
+    Sensor(588, "Battery SOC", "%"),
+    Sensor(590, "Battery power", WATT, -1),
+    Sensor(591, "Battery current", AMPS, -0.01),
 )
 
 #################
 # Inverter Power
 #################
 _SENSORS += (
-    Sensor(175, "Inverter power", WATT, -1),
-    Sensor(154, "Inverter voltage", VOLT, 0.1),
-    Sensor(193, "Inverter frequency", "Hz", 0.01),
+    Sensor(636, "Inverter power", WATT, -1),
+    Sensor(633, "Inverter L1 power", WATT, -1),
+    Sensor(634, "Inverter L2 power", WATT, -1),
+    Sensor(635, "Inverter L3 power", WATT, -1),
+    Sensor(627, "Inverter voltage", VOLT, 0.1),
+    Sensor(638, "Inverter frequency", "Hz", 0.01),
 )
 
 #############
 # Grid Power
 #############
 _SENSORS += (
-    Sensor(79, "Grid frequency", "Hz", 0.01),
-    Sensor(169, "Grid power", WATT, -1),  # L1(167) + L2(168)
-    Sensor(167, "Grid LD power", WATT, -1),  # L1 seems to be LD
-    Sensor(168, "Grid L2 power", WATT, -1),
-    Sensor(150, "Grid voltage", VOLT, 0.1),
-    MathSensor((160, 161), "Grid current", AMPS, factors=(0.01, 0.01)),
-    Sensor(172, "Grid CT power", WATT, -1),
+    Sensor(609, "Grid frequency", "Hz", 0.01),
+    Sensor(625, "Grid power", WATT, -1),            # gridTotalPac
+    Sensor(622, "Grid L1 power", WATT, -1),         # aPower
+    Sensor(623, "Grid L2 power", WATT, -1),         # bPower
+    Sensor(624, "Grid L3 power", WATT, -1),         # cPower
+    Sensor(601, "Grid voltage", VOLT, 0.1),         # aLineVolt
+    MathSensor((610, 611, 612), "Grid current", AMPS, factors=(0.01, 0.01, 0.01)),  # iac1,iac2,iac3
+    Sensor(619, "Grid CT power", WATT, -1),         # gridOutsideTotalPac (unsure ??)
 )
-# LD power?
 
 #############
 # Load Power
 #############
 _SENSORS += (
-    Sensor(178, "Load power", WATT, -1),  # L1(176) + L2(177)
-    Sensor(176, "Load L1 power", WATT, -1),
-    Sensor(177, "Load L2 power", WATT, -1),
+    Sensor(653, "Load power", WATT, -1),
+    Sensor(650, "Load L1 power", WATT, -1),
+    Sensor(651, "Load L2 power", WATT, -1),
+    Sensor(652, "Load L3 power", WATT, -1),
 )
 
 ################
 # Solar Power 1
 ################
 _SENSORS += (
-    Sensor(186, "PV1 power", WATT, -1),
-    Sensor(109, "PV1 voltage", VOLT, 0.1),
-    Sensor(110, "PV1 current", AMPS, 0.1),
+    Sensor(672, "PV1 power", WATT, -1),
+    Sensor(676, "PV1 voltage", VOLT, 0.1),
+    Sensor(677, "PV1 current", AMPS, 0.1),
 )
 
 ################
 # Solar Power 2
 ################
 _SENSORS += (
-    Sensor(187, "PV2 power", WATT, -1),
-    Sensor(111, "PV2 voltage", VOLT, 0.1),
-    Sensor(112, "PV2 current", AMPS, 0.1),
+    Sensor(673, "PV2 power", WATT, -1),
+    Sensor(678, "PV2 voltage", VOLT, 0.1),
+    Sensor(679, "PV2 current", AMPS, 0.1),
 )
 
+################
+# Solar Power 3 (?? deye 12k only has 2 MPPT)
+################
+_SENSORS += (
+    Sensor(674, "PV3 power", WATT, -1),
+    Sensor(680, "PV3 voltage", VOLT, 0.1),
+    Sensor(681, "PV3 current", AMPS, 0.1),
+)
+
+################
+# Solar Power 4 (?? deye 12k only has 2 MPPT)
+################
+_SENSORS += (
+    Sensor(675, "PV4 power", WATT, -1),
+    Sensor(682, "PV4 voltage", VOLT, 0.1),
+    Sensor(683, "PV4 current", AMPS, 0.1),
+)
+
+
 ###################
-# Power on Outputs
+# Power on Outputs (aka GEN - which has multiple modes on the deye 12k)
 ###################
 _SENSORS += (
-    Sensor(166, "AUX power", WATT, -1),
-    MathSensor((175, 167, 166), "Essential power", WATT, factors=(1, 1, -1)),
-    MathSensor(
-        (172, 167), "Non-Essential power", WATT, factors=(1, -1), no_negative=True
-    ),
+    Sensor(667, "Gen power", WATT, -1),
+    Sensor(664, "Gen L1 power", WATT, -1),
+    Sensor(665, "Gen L2 power", WATT, -1),
+    Sensor(666, "Gen L3 power", WATT, -1),
 )
 
 ###################
 # Energy
 ###################
 _SENSORS += (
-    Sensor(60, "Day Active Energy", KWH, -0.1),
-    Sensor(70, "Day Battery Charge", KWH, 0.1),
-    Sensor(71, "Day Battery discharge", KWH, 0.1),
-    Sensor(77, "Day Grid Export", KWH, 0.1),
-    Sensor(76, "Day Grid Import", KWH, 0.1),
-    # Sensor(200, "Day Load Power", KWH, 0.01),
-    Sensor(84, "Day Load Energy", KWH, 0.1),
-    Sensor(108, "Day PV Energy", KWH, 0.1),
-    Sensor(61, "Day Reactive Energy", "kVarh", -0.1),
-    # Sensor((201, 202), "History Load Power", KWH, 0.1),
-    Sensor(67, "Month Grid Energy", KWH, 0.1),
-    Sensor(66, "Month Load Energy", KWH, 0.1),
-    Sensor(65, "Month PV Energy", KWH, 0.1),
-    Sensor((63, 64), "Total Active Energy", KWH, 0.1),  # signed?
-    Sensor((72, 73), "Total Battery Charge", KWH, 0.1),
-    Sensor((74, 75), "Total Battery Discharge", KWH, 0.1),
-    Sensor((81, 82), "Total Grid Export", KWH, 0.1),
-    Sensor((78, 80), "Total Grid Import", KWH, 0.1),
-    Sensor((85, 86), "Total Load Energy", KWH, 0.1),
-    Sensor((96, 97), "Total PV Energy", KWH, 0.1),
-    Sensor((98, 99), "Year Grid Export", KWH, 0.1),
-    Sensor((87, 88), "Year Load Energy", KWH, 0.1),
-    Sensor((68, 69), "Year PV Energy", KWH, 0.1),
+    Sensor(502, "Day Active Energy", KWH, -0.1),
+    Sensor(514, "Day Battery Charge", KWH, 0.1),
+    Sensor(515, "Day Battery discharge", KWH, 0.1),
+    Sensor(521, "Day Grid Export", KWH, 0.1),
+    Sensor(520, "Day Grid Import", KWH, 0.1),
+    Sensor(536, "Day Gen Energy", KWH, 0.1),
+    Sensor(526, "Day Load Energy", KWH, 0.1),      # I guess "used" = load?
+    Sensor(529, "Day PV Energy", KWH, 0.1),
+    ### not for 12k?? Sensor(61, "Day Reactive Energy", "kVarh", -0.1),
+    ### not for 12k?? Sensor(67, "Month Grid Energy", KWH, 0.1),
+    ### not for 12k?? Sensor(66, "Month Load Energy", KWH, 0.1),
+    ### not for 12k?? Sensor(65, "Month PV Energy", KWH, 0.1),
+    Sensor((506, 507), "Total Active Energy", KWH, 0.1),  # signed?
+    Sensor((516, 517), "Total Battery Charge", KWH, 0.1),
+    Sensor((518, 519), "Total Battery Discharge", KWH, 0.1),
+    Sensor((524, 525), "Total Grid Export", KWH, 0.1),
+    Sensor((522, 523), "Total Grid Import", KWH, 0.1),
+    Sensor((527, 528), "Total Load Energy", KWH, 0.1),
+    Sensor((534, 535), "Total PV Energy", KWH, 0.1),
+    ### not for 12k?? Sensor((98, 99), "Year Grid Export", KWH, 0.1),
+    ### not for 12k?? Sensor((87, 88), "Year Load Energy", KWH, 0.1),
+    ### not for 12k?? Sensor((68, 69), "Year PV Energy", KWH, 0.1),
 )
 
 ##########
 # General
 ##########
-RATED_POWER = Sensor((16, 17), "Rated power", WATT, 0.1)
+RATED_POWER = Sensor((16, 17), "Rated power", WATT, 0.1)        # 12k incorret: 26850kW
 _SENSORS.append(RATED_POWER)
 _SENSORS += (
     Sensor(0, "Device Type"),
-    FaultSensor((103, 104, 105, 106, 107), "Fault"),
-    InverterStateSensor(59, "Overall state"),
-    SDStatusSensor(92, "SD Status", ""),  # type: ignore
-    SerialSensor((3, 4, 5, 6, 7), "Serial"),
-    TempSensor(90, "DC transformer temperature", CELSIUS, 0.1),
-    TempSensor(95, "Environment temperature", CELSIUS, 0.1),
-    TempSensor(91, "Radiator temperature", CELSIUS, 0.1),
-    Sensor(194, "Grid Connected Status"),
+    FaultSensor((103, 104, 105, 106, 107), "Fault"),            # 12k??
+    InverterStateSensor(59, "Overall state"),                   # 12k??
+    SDStatusSensor(92, "SD Status", ""),  # type: ignore        # 12k??
+    SerialSensor((3, 4, 5, 6, 7), "Serial"),                    # seems good for 12k
+    TempSensor(540, "DC transformer temperature", CELSIUS, 0.1),
+    TempSensor(217, "Environment temperature", CELSIUS, 0.1),   # 12k: realtimeTemp
+    TempSensor(541, "Radiator temperature", CELSIUS, 0.1),
+    Sensor(194, "Grid Connected Status"),                       # 12k??
 )
+
+## end of changes for 12k for now
+
 ###########
 # Settings
 ###########
@@ -340,32 +364,6 @@ ALL_SENSORS: Dict[str, Sensor] = {s.id: s for s in _SENSORS}
 def _deprecated() -> None:
     """Populate the deprecated sensors."""
     dep_map: Dict[str, Sensor] = {
-        "aux_power": Sensor(166, "AUX load", WATT, -1),
-        "battery_temperature": TempSensor(182, "Temp Battery", CELSIUS, 0.1),
-        "dc_transformer_temperature": TempSensor(
-            90, "Temp DC transformer", CELSIUS, 0.1
-        ),
-        "environment_temperature": TempSensor(95, "Temp Environment", CELSIUS, 0.1),
-        "grid_charge_battery_current": Sensor(230, "Battery Grid Charge", AMPS, -1),
-        "grid_ct_power": Sensor(172, "Grid CT load", WATT, -1),
-        "grid_l2_power": Sensor(168, "Grid L2 load", WATT, -1),
-        "grid_ld_power": Sensor(167, "Grid L1 load", WATT, -1),
-        "grid_power": Sensor(169, "Grid load", WATT, -1),
-        "inverter_power": Sensor(175, "Inverter Output", WATT, -1),
-        "radiator_temperature": TempSensor(91, "Temp Radiator", CELSIUS, 0.1),
-        "day_active_energy": Sensor(60, "Day Active Power", KWH, -0.1),
-        "day_reactive_energy": Sensor(61, "Day Reactive Power", "kVarh", -0.1),
-        "total_active_energy": Sensor((63, 64), "Total Active Power", KWH, 0.1),
-        "month_pv_energy": Sensor(65, "Month PV Power", KWH),
-        "month_load_energy": Sensor(66, "Month Load Power", KWH),
-        "month_grid_energy": Sensor(67, "Month Grid Power", KWH),
-        "year_pv_energy": Sensor((68, 69), "Year PV Power", KWH, 0.1),
-        "day_load_energy": Sensor(84, "Day Load Power", KWH, 0.1),
-        "total_load_energy": Sensor((85, 86), "Total Load Power", KWH, 0.1),
-        "year_load_energy": Sensor((87, 88), "Year Load Power", KWH, 0.1),
-        "total_pv_energy": Sensor((96, 97), "Total PV Power", KWH, 0.1),
-        "battery_equalization_voltage": Sensor(201, "Equalization voltage", VOLT, 0.01),
-        "battery_absorption_voltage": Sensor(202, "Absorption voltage", VOLT, 0.01),
     }
 
     for newname, sen in dep_map.items():
